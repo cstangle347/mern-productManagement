@@ -1,46 +1,77 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Form from 'react-bootstrap/Form';
+import { navigate } from '@reach/router';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const AddProduct = (props) => {
-	const [ title, setTitle ] = useState('');
+	const [ title, setTitle ] = useState("");
 	const [ price, setPrice ] = useState(null);
-	const [ description, setDescription ] = useState('');
-	const [ errors, setErrors ] = useState('');
+	const [ description, setDescription ] = useState("");
+	const [ errors, setErrors ] = useState({});
 
-	const createProduct = (e) => {
-		e.preventDefault();
+	const handleSubmit = (event) => {
+    event.preventDefault();
+    const product = { title, price, description }
 		axios
-			.post('http://localhost:8000/api/products/new', { title, price, description })
+			.post("http://localhost:8000/api/products", product)
 			.then((res) => {
 				if (res.data.errors) {
 					setErrors(res.data.errors);
 				} else {
-					window.location.reload(false);
+					navigate("/");
 				}
 			})
 			.catch((err) => console.log(err));
 	};
 
 	return (
-		<Form onSubmit= { createProduct }>
-			<Form.Group>
-				<Form.Label>Title: </Form.Label>
-				<Form.Control onChange={(e) => setTitle(e.target.value)} size="lg" type="text" />
-				{errors.title ? <p>{errors.title.message}</p> : ''}
-			</Form.Group>
-			<Form.Group>
-				<Form.Label>Price: </Form.Label>
-				<Form.Control onChange={(e) => setPrice(e.target.value)} size="lg" type="text" />
-				{errors.price ? <p>{errors.price.message}</p> : ''}
-			</Form.Group>
-			<Form.Group>
-				<Form.Label>Description: </Form.Label>
-				<Form.Control onChange={(e) => setDescription(e.target.value)} size="lg" type="text" />
-				{errors.description ? <p>{errors.description.message}</p> : ''}
-      </Form.Group>
-      <input type="submit" />
-		</Form>
+		<form
+			onSubmit={(event) => {
+				handleSubmit(event);
+      }}
+    >
+
+      <div className= "form-group">
+        <lable>Title: </lable>
+        <input 
+          className= "form-control"
+          type= "text"
+          value= {title}
+          onChange={(event) => {
+            setTitle(event.target.value);
+          }}
+        />
+        { errors.title ? <p className="text-danger">{errors.title.message}</p> : "" }
+      </div>
+
+      <div>
+        <lable>Price: </lable>
+        <input
+          className= "form-control"
+          type= "number"
+          value={price}
+          onChange={(event) => {
+            setPrice(event.target.value);
+          }}
+        />
+        { errors.price ? <p className="text-danger">{errors.price.message}</p> : "" }
+      </div>
+
+      <div>
+        <lable>Description: </lable>
+        <textarea
+          className= "form-control"
+          type= "text"
+          value= {description}
+          onChange={(event) => {
+            setDescription(event.target.value);
+          }}>
+        </textarea>
+        { errors.description ? <p className="text-danger">{errors.description.message}</p> : "" }
+      </div>
+      <input className="btn btn-secondary mt-3" type= "Submit" />
+    
+      </form>
 	)
 }
-export default AddProduct;
+export default AddProduct
