@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const AddProduct = (props) => {
 	const [ title, setTitle ] = useState("");
-	const [ price, setPrice ] = useState(null);
+	const [ price, setPrice ] = useState(1);
 	const [ description, setDescription ] = useState("");
 	const [ errors, setErrors ] = useState({});
 
@@ -36,7 +36,6 @@ const AddProduct = (props) => {
         <input 
           className= "form-control"
           type= "text"
-          value= {title}
           onChange={(event) => {
             setTitle(event.target.value);
           }}
@@ -49,7 +48,6 @@ const AddProduct = (props) => {
         <input
           className= "form-control"
           type= "number"
-          value={price}
           onChange={(event) => {
             setPrice(event.target.value);
           }}
@@ -62,7 +60,6 @@ const AddProduct = (props) => {
         <textarea
           className= "form-control"
           type= "text"
-          value= {description}
           onChange={(event) => {
             setDescription(event.target.value);
           }}>
@@ -74,4 +71,4 @@ const AddProduct = (props) => {
       </form>
 	)
 }
-export default AddProduct
+export default AddProduct;
